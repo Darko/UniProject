@@ -22,22 +22,29 @@ module.exports.create = function (req, res) {
 };
 
 module.exports.show = function (req, res) {
-  User.findOne({_id: req.body.id})
+  User.findOne({_id: req.params.user})
   .then(function (user) {
-    res.json({
-      user: user,
-      status: 200,
-      message: 'User was found in the database'
-    });
+    if(!user) {
+      res.json({
+        status: 404,
+        message: 'User not found'
+      });
+    } else {
+      res.json({
+        user: user,
+        status: 200,
+        message: 'User was found in the database'
+      });
+    }
   })
-  .catchn(function(error){
+  .catch(function(error){
     console.log(error);
     //needs proper handling
   });
 };
 
 module.exports.update = function(req, res) {
-  User.update({_id: req.body.id}, {
+  User.update({_id: req.params.user}, {
     name: req.body.name,
     age: req.body.age,
     email: req.body.email
