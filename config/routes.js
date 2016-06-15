@@ -6,6 +6,7 @@ module.exports = function (app) {
     res.send("kappa");
   });
 
+  app.get('/api/users', users.index);
   app.get('/api/users/:user', users.show);
   app.post('/api/user', users.create);
   app.put('/api/users/:user', users.update);

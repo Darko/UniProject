@@ -19,13 +19,40 @@ module.exports.create = function (req, res) {
     });
   })
   .catch(function (error) {
+    res.json({
+      status: 500,
+      message: 'Something went wrong'
+    });
     console.log(error);
   });
 
 };
 
+module.exports.index = function (req, res) {
+  User.find({})
+  .then(function (users) {
+    if(!users.length) {
+      return res.json({
+        status: 404,
+        message: 'There\'s no users in the database'
+      });
+    }
+    res.json({
+      users: users,
+      status: 200,
+      message: 'Lookup successfull'
+    })
+    .catch(function (error) {
+      res.json({
+        status: 500,
+        message: 'Something went wrong'
+      });
+      console.log(error);
+    });
+  });
+};
+
 module.exports.show = function (req, res) {
-  console.log(req.body);
   User.find({_id: req.params.user})
   .then(function (user) {
     if(!user.length) {
@@ -42,6 +69,10 @@ module.exports.show = function (req, res) {
     }
   })
   .catch(function(error){
+    res.json({
+      status: 500,
+      message: 'Something went wrong'
+    });
     console.log(error);
     //needs proper handling
   });
@@ -56,6 +87,10 @@ module.exports.update = function(req, res) {
       message: 'User updated successfully'
     })
     .catch(function (error) {
+      res.json({
+        status: 500,
+        message: 'Something went wrong'
+      });
       console.log(error);
     });
   });
@@ -79,6 +114,10 @@ module.exports.remove = function (req, res) {
     }
   })
   .catch(function (error) {
+    res.json({
+      status: 500,
+      message: 'Something went wrong'
+    });
     console.log(error);
   });
 };
