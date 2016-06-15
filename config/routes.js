@@ -9,5 +9,6 @@ module.exports = function (app) {
   app.get('/api/users/:user', users.show);
   app.post('/api/user', users.create);
   app.put('/api/users/:user', users.update);
+  app.delete('/api/users/:user', users.remove);
 
 };

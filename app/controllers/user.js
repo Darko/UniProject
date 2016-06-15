@@ -60,3 +60,25 @@ module.exports.update = function(req, res) {
     });
   });
 };
+
+module.exports.remove = function (req, res) {
+  User.find({_id: req.params.user})
+  .then(function (user) {
+    if(!user.length) {
+      return res.json({
+        status: 404,
+        message: 'No such user was found'
+      });
+    }
+    else {
+      user.remove();
+      res.json({
+        status: 200,
+        message: 'User was remove'
+      });
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+};
