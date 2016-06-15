@@ -10,21 +10,25 @@ module.exports.create = function (req, res) {
 
   // Regex test for email
 
-  user.save(function (error) {
-    if(error) return console.log(error); // Needs proper error handling
+  user.save()
+  .then(function (user) {
     res.json({
       user: user,
       status: 201,
       message: 'Successfully created user'
     });
+  })
+  .catch(function (error) {
+    console.log(error);
   });
 
 };
 
 module.exports.show = function (req, res) {
-  User.findOne({_id: req.params.user})
+  console.log(req.body);
+  User.find({_id: req.params.user})
   .then(function (user) {
-    if(!user) {
+    if(!user.length) {
       res.json({
         status: 404,
         message: 'User not found'
@@ -44,11 +48,7 @@ module.exports.show = function (req, res) {
 };
 
 module.exports.update = function(req, res) {
-  User.update({_id: req.params.user}, {
-    name: req.body.name,
-    age: req.body.age,
-    email: req.body.email
-  })
+  User.update({_id: req.params.user}, req.body)
   .then(function(user) {
     res.json({
       user: user,
