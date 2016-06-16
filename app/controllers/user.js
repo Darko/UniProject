@@ -109,7 +109,7 @@ module.exports.remove = function (req, res) {
       user.remove();
       res.json({
         status: 200,
-        message: 'User was remove'
+        message: 'User was removed'
       });
     }
   })
