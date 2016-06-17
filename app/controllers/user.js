@@ -14,8 +14,8 @@ module.exports.create = function (req, res) {
 module.exports.index = function (req, res) {
   // optional logging here: log.data(`All users requested`);
   return Order.find().exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 };
 
 
