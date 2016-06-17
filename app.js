@@ -1,8 +1,8 @@
-var express = require('express'),
+let express = require('express'),
     app = express(),
     http = require('http').Server(app);
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     config = require('./config/config');
 
 mongoose.connect(config.db);
