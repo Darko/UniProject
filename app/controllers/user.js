@@ -30,16 +30,16 @@ module.exports.show = function (req, res) {
 module.exports.update = function(req, res) {
   // optional logging here: log.data(`Updated user with id ${req.params.user}`);
   return Order.findById(req.params.user).exec()
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(util.handleEntityNotFound(res))
+    .then(util.saveUpdates(req.body))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 };
 
 module.exports.remove = function (req, res) {
   // optional logging here: log.data(`Removed user with id ${req.params.user}`);
   return Order.findById(req.params.user).exec()
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+    .then(util.handleEntityNotFound(res))
+    .then(util.removeEntity(res))
+    .catch(util.handleError(res));
 };
