@@ -1,123 +1,45 @@
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
+let mongoose = require('mongoose');
+let User     = mongoose.model('User');
+let log      = require('../components/logger');
+let util     = require('../components/util');
+
 
 module.exports.create = function (req, res) {
-  var user = new User({
-    name: req.body.name,
-    age: req.body.age,
-    email: req.body.email
-  });
-
-  // Regex test for email
-
-  user.save()
-  .then(function (user) {
-    res.json({
-      user: user,
-      status: 201,
-      message: 'Successfully created user'
-    });
-  })
-  .catch(function (error) {
-    res.json({
-      status: 500,
-      message: 'Something went wrong'
-    });
-    console.log(error);
-  });
-
+  // optional logging here: log.data(`Created user with name ${name}`);
+  return User.create(req.body)
+  .then(util.respondWithResult(res, 201))
+  .catch(util.handleError(res));
 };
 
 module.exports.index = function (req, res) {
-  User.find({})
-  .then(function (users) {
-    if(!users.length) {
-      return res.json({
-        status: 404,
-        message: 'There\'s no users in the database'
-      });
-    }
-    res.json({
-      users: users,
-      status: 200,
-      message: 'Lookup successfull'
-    })
-    .catch(function (error) {
-      res.json({
-        status: 500,
-        message: 'Something went wrong'
-      });
-      console.log(error);
-    });
-  });
+  // optional logging here: log.data(`All users requested`);
+  return Order.find().exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 };
 
+
 module.exports.show = function (req, res) {
-  User.find({_id: req.params.user})
-  .then(function (user) {
-    if(!user.length) {
-      res.json({
-        status: 404,
-        message: 'User not found'
-      });
-    } else {
-      res.json({
-        user: user,
-        status: 200,
-        message: 'User was found in the database'
-      });
-    }
-  })
-  .catch(function(error){
-    res.json({
-      status: 500,
-      message: 'Something went wrong'
-    });
-    console.log(error);
-    //needs proper handling
-  });
+  // optional logging here: log.data(`Request for user with id ${req.params.user}`);
+  return User.findById(req.params.user).exec()
+    .then(util.handleEntityNotFound(res))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 };
 
 module.exports.update = function(req, res) {
-  User.update({_id: req.params.user}, req.body)
-  .then(function(user) {
-    res.json({
-      user: user,
-      status: 201,
-      message: 'User updated successfully'
-    })
-    .catch(function (error) {
-      res.json({
-        status: 500,
-        message: 'Something went wrong'
-      });
-      console.log(error);
-    });
-  });
+  // optional logging here: log.data(`Updated user with id ${req.params.user}`);
+  return Order.findById(req.params.user).exec()
+    .then(handleEntityNotFound(res))
+    .then(saveUpdates(req.body))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 };
 
 module.exports.remove = function (req, res) {
-  User.find({_id: req.params.user})
-  .then(function (user) {
-    if(!user.length) {
-      return res.json({
-        status: 404,
-        message: 'No such user was found'
-      });
-    }
-    else {
-      user.remove();
-      res.json({
-        status: 200,
-        message: 'User was removed'
-      });
-    }
-  })
-  .catch(function (error) {
-    res.json({
-      status: 500,
-      message: 'Something went wrong'
-    });
-    console.log(error);
-  });
+  // optional logging here: log.data(`Removed user with id ${req.params.user}`);
+  return Order.findById(req.params.user).exec()
+    .then(handleEntityNotFound(res))
+    .then(removeEntity(res))
+    .catch(handleError(res));
 };
